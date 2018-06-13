@@ -1,0 +1,10 @@
+
+*.tlog
+*.exe
+*.log
+*.pdb
+*.obj
+*.opensdf
+*.sdf
+VC/UpgradeLog.htm
+*.idb
