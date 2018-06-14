@@ -104,19 +104,23 @@ copy check.c.w32 check.c</Command>
     <ClCompile Include="..\libdwarf\dwarf_arange.c" />
     <ClCompile Include="..\libdwarf\dwarf_die_deliv.c" />
     <ClCompile Include="..\libdwarf\dwarf_elf_access.c" />
+    <ClCompile Include="..\libdwarf\dwarf_errmsg_list.c" />
     <ClCompile Include="..\libdwarf\dwarf_error.c" />
     <ClCompile Include="..\libdwarf\dwarf_form.c" />
     <ClCompile Include="..\libdwarf\dwarf_frame.c" />
     <ClCompile Include="..\libdwarf\dwarf_frame2.c" />
     <ClCompile Include="..\libdwarf\dwarf_frame3.c" />
     <ClCompile Include="..\libdwarf\dwarf_funcs.c" />
+    <ClCompile Include="..\libdwarf\dwarf_gdbindex.c" />
     <ClCompile Include="..\libdwarf\dwarf_global.c" />
+    <ClCompile Include="..\libdwarf\dwarf_harmless.c" />
     <ClCompile Include="..\libdwarf\dwarf_init_finish.c" />
     <ClCompile Include="..\libdwarf\dwarf_leb.c" />
     <ClCompile Include="..\libdwarf\dwarf_line.c" />
     <ClCompile Include="..\libdwarf\dwarf_line2.c" />
     <ClCompile Include="..\libdwarf\dwarf_loc.c" />
     <ClCompile Include="..\libdwarf\dwarf_macro.c" />
+    <ClCompile Include="..\libdwarf\dwarf_macro5.c" />
     <ClCompile Include="..\libdwarf\dwarf_original_elf_init.c" />
     <ClCompile Include="..\libdwarf\dwarf_print_lines.c" />
     <ClCompile Include="..\libdwarf\dwarf_pubtypes.c" />
@@ -125,10 +129,13 @@ copy check.c.w32 check.c</Command>
     <ClCompile Include="..\libdwarf\dwarf_sort_line.c" />
     <ClCompile Include="..\libdwarf\dwarf_string.c" />
     <ClCompile Include="..\libdwarf\dwarf_stubs.c" />
+    <ClCompile Include="..\libdwarf\dwarf_tied.c" />
+    <ClCompile Include="..\libdwarf\dwarf_tsearchhash.c" />
     <ClCompile Include="..\libdwarf\dwarf_types.c" />
     <ClCompile Include="..\libdwarf\dwarf_util.c" />
     <ClCompile Include="..\libdwarf\dwarf_vars.c" />
     <ClCompile Include="..\libdwarf\dwarf_weaks.c" />
+    <ClCompile Include="..\libdwarf\dwarf_xu_index.c" />
     <ClCompile Include="..\libdwarf\malloc_check.c" />
     <ClCompile Include="..\libdwarf\pro_alloc.c" />
     <ClCompile Include="..\libdwarf\pro_arange.c" />
@@ -170,6 +177,57 @@ copy check.c.w32 check.c</Command>
       <Project>{1f6c9a28-676d-4257-8e17-0f22c5e82f4d}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\libdwarf\dwarf_abbrev.h" />
+    <ClInclude Include="..\libdwarf\dwarf_alloc.h" />
+    <ClInclude Include="..\libdwarf\dwarf_arange.h" />
+    <ClInclude Include="..\libdwarf\dwarf_base_types.h" />
+    <ClInclude Include="..\libdwarf\dwarf_die_deliv.h" />
+    <ClInclude Include="..\libdwarf\dwarf_elf_access.h" />
+    <ClInclude Include="..\libdwarf\dwarf_error.h" />
+    <ClInclude Include="..\libdwarf\dwarf_frame.h" />
+    <ClInclude Include="..\libdwarf\dwarf_funcs.h" />
+    <ClInclude Include="..\libdwarf\dwarf_gdbindex.h" />
+    <ClInclude Include="..\libdwarf\dwarf_global.h" />
+    <ClInclude Include="..\libdwarf\dwarf_harmless.h" />
+    <ClInclude Include="..\libdwarf\dwarf_incl.h" />
+    <ClInclude Include="..\libdwarf\dwarf_line.h" />
+    <ClInclude Include="..\libdwarf\dwarf_loc.h" />
+    <ClInclude Include="..\libdwarf\dwarf_macro.h" />
+    <ClInclude Include="..\libdwarf\dwarf_macro5.h" />
+    <ClInclude Include="..\libdwarf\dwarf_opaque.h" />
+    <ClInclude Include="..\libdwarf\dwarf_reloc_arm.h" />
+    <ClInclude Include="..\libdwarf\dwarf_reloc_mips.h" />
+    <ClInclude Include="..\libdwarf\dwarf_reloc_ppc.h" />
+    <ClInclude Include="..\libdwarf\dwarf_reloc_ppc64.h" />
+    <ClInclude Include="..\libdwarf\dwarf_reloc_x86_64.h" />
+    <ClInclude Include="..\libdwarf\dwarf_tsearch.h" />
+    <ClInclude Include="..\libdwarf\dwarf_types.h" />
+    <ClInclude Include="..\libdwarf\dwarf_util.h" />
+    <ClInclude Include="..\libdwarf\dwarf_vars.h" />
+    <ClInclude Include="..\libdwarf\dwarf_weaks.h" />
+    <ClInclude Include="..\libdwarf\dwarf_xu_index.h" />
+    <ClInclude Include="..\libdwarf\libdwarf.h" />
+    <ClInclude Include="..\libdwarf\libdwarfdefs.h" />
+    <ClInclude Include="..\libdwarf\malloc_check.h" />
+    <ClInclude Include="..\libdwarf\pro_alloc.h" />
+    <ClInclude Include="..\libdwarf\pro_arange.h" />
+    <ClInclude Include="..\libdwarf\pro_die.h" />
+    <ClInclude Include="..\libdwarf\pro_encode_nm.h" />
+    <ClInclude Include="..\libdwarf\pro_error.h" />
+    <ClInclude Include="..\libdwarf\pro_expr.h" />
+    <ClInclude Include="..\libdwarf\pro_frame.h" />
+    <ClInclude Include="..\libdwarf\pro_incl.h" />
+    <ClInclude Include="..\libdwarf\pro_line.h" />
+    <ClInclude Include="..\libdwarf\pro_macinfo.h" />
+    <ClInclude Include="..\libdwarf\pro_opaque.h" />
+    <ClInclude Include="..\libdwarf\pro_reloc.h" />
+    <ClInclude Include="..\libdwarf\pro_reloc_stream.h" />
+    <ClInclude Include="..\libdwarf\pro_reloc_symbolic.h" />
+    <ClInclude Include="..\libdwarf\pro_section.h" />
+    <ClInclude Include="..\libdwarf\pro_types.h" />
+    <ClInclude Include="..\libdwarf\pro_util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,40 +1,29 @@
 /*
 
   Copyright (C) 2000-2006 Silicon Graphics, Inc.  All Rights Reserved.
-  Portions Copyright (C) 2009 David Anderson. All Rights Reserved.
+  Portions Copyright (C) 2009-2011 David Anderson. All Rights Reserved.
 
   This program is free software; you can redistribute it and/or modify it
-  under the terms of version 2.1 of the GNU Lesser General Public License 
+  under the terms of version 2.1 of the GNU Lesser General Public License
   as published by the Free Software Foundation.
 
   This program is distributed in the hope that it would be useful, but
   WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
   Further, this software is distributed without any warranty that it is
-  free of the rightful claim of any third person regarding infringement 
-  or the like.  Any license provided herein, whether implied or 
+  free of the rightful claim of any third person regarding infringement
+  or the like.  Any license provided herein, whether implied or
   otherwise, applies only to this software file.  Patent licenses, if
-  any, provided herein do not apply to combinations of this program with 
-  other software, or any other product whatsoever.  
+  any, provided herein do not apply to combinations of this program with
+  other software, or any other product whatsoever.
 
-  You should have received a copy of the GNU Lesser General Public 
-  License along with this program; if not, write the Free Software 
+  You should have received a copy of the GNU Lesser General Public
+  License along with this program; if not, write the Free Software
   Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston MA 02110-1301,
   USA.
 
-  Contact information:  Silicon Graphics, Inc., 1500 Crittenden Lane,
-  Mountain View, CA 94043, or:
-
-  http://www.sgi.com
-
-  For further information regarding this notice, see:
-
-  http://oss.sgi.com/projects/GenInfo/NoticeExplan
-
 */
-
-
 
 #include "config.h"
 #include "dwarf_incl.h"
@@ -43,8 +32,7 @@
 #include "dwarf_frame.h"
 #include "dwarf_arange.h" /* using Arange as a way to build a list */
 
-/*
-    Used by rqs (an IRIX application).  
+/*  Used by rqs (an IRIX application).
     Not needed except for that one application.
     Should be moved to its own source file since
     it is so rarely needed.
@@ -58,30 +46,31 @@
 */
 int
 _dwarf_frame_address_offsets(Dwarf_Debug dbg, Dwarf_Addr ** addrlist,
-                             Dwarf_Off ** offsetlist,
-                             Dwarf_Signed * returncount,
-                             Dwarf_Error * err)
+    Dwarf_Off ** offsetlist,
+    Dwarf_Signed * returncount,
+    Dwarf_Error * err)
 {
     int retval = DW_DLV_OK;
     int res = DW_DLV_ERROR;
-    Dwarf_Cie *cie_data;
-    Dwarf_Signed cie_count;
-    Dwarf_Fde *fde_data;
-    Dwarf_Signed fde_count;
-    Dwarf_Signed i;
-    Dwarf_Frame_Op *frame_inst;
-    Dwarf_Fde fdep;
-    Dwarf_Cie ciep;
+    Dwarf_Cie *cie_data = 0;
+    Dwarf_Signed cie_count = 0;
+    Dwarf_Fde *fde_data = 0;
+    Dwarf_Signed fde_count = 0;
+    Dwarf_Signed i = 0;
+    Dwarf_Unsigned u = 0;
+    Dwarf_Frame_Op *frame_inst = 0;
+    Dwarf_Fde fdep = 0;
+    Dwarf_Cie ciep = 0;
     Dwarf_Chain curr_chain = 0;
     Dwarf_Chain head_chain = 0;
     Dwarf_Chain prev_chain = 0;
-    Dwarf_Arange arange;
+    Dwarf_Arange arange = 0;
     Dwarf_Unsigned arange_count = 0;
     Dwarf_Addr *arange_addrs = 0;
     Dwarf_Off *arange_offsets = 0;
 
     res = dwarf_get_fde_list(dbg, &cie_data, &cie_count,
-                             &fde_data, &fde_count, err);
+        &fde_data, &fde_count, err);
     if (res != DW_DLV_OK) {
         return res;
     }
@@ -90,6 +79,9 @@ _dwarf_frame_address_offsets(Dwarf_Debug dbg, Dwarf_Addr ** addrlist,
     if (res != DW_DLV_OK) {
         return res;
     }
+    if (!dbg->de_debug_frame.dss_size) {
+        return (DW_DLV_NO_ENTRY);
+    }
 
     for (i = 0; i < cie_count; i++) {
         Dwarf_Off instoff = 0;
@@ -97,7 +89,6 @@ _dwarf_frame_address_offsets(Dwarf_Debug dbg, Dwarf_Addr ** addrlist,
         Dwarf_Small *instr_end = 0;
         Dwarf_Sword icount = 0;
         int j = 0;
-        int dw_err;
 
         ciep = cie_data[i];
         instoff = ciep->ci_cie_instr_start - dbg->de_debug_frame.dss_data;
@@ -117,10 +108,10 @@ _dwarf_frame_address_offsets(Dwarf_Debug dbg, Dwarf_Addr ** addrlist,
             /* cie= */ 0,
             dbg,
             DW_FRAME_CFA_COL,
-            &icount, &dw_err);
+            &icount,
+            NULL, NULL,err);
         if (res == DW_DLV_ERROR) {
-            _dwarf_error(dbg, err, dw_err);
-            return (res);
+            return res;
         } else if (res == DW_DLV_NO_ENTRY) {
             continue;
         }
@@ -168,7 +159,6 @@ _dwarf_frame_address_offsets(Dwarf_Debug dbg, Dwarf_Addr ** addrlist,
         Dwarf_Off off = 0;
         Dwarf_Addr addr = 0;
         int j = 0;
-        int dw_err;
 
         fdep = fde_data[i];
         off = fdep->fd_initial_loc_pos - dbg->de_debug_frame.dss_data;
@@ -213,10 +203,10 @@ _dwarf_frame_address_offsets(Dwarf_Debug dbg, Dwarf_Addr ** addrlist,
             /* cie= */ 0,
             dbg,
             DW_FRAME_CFA_COL,
-            &icount, &dw_err);
+            &icount,
+            NULL,NULL,err);
         if (res == DW_DLV_ERROR) {
-            _dwarf_error(dbg, err, dw_err);
-            return (res);
+            return res;
         } else if (res == DW_DLV_NO_ENTRY) {
             continue;
         }
@@ -227,7 +217,7 @@ _dwarf_frame_address_offsets(Dwarf_Debug dbg, Dwarf_Addr ** addrlist,
             if (finst2->fp_base_op == 0 && finst2->fp_extended_op == 1) {
                 /* is DW_CFA_set_loc */
                 Dwarf_Addr add = (Dwarf_Addr) finst2->fp_offset;
-                Dwarf_Off off = finst2->fp_instr_offset + instoff;
+                Dwarf_Off off2 = finst2->fp_instr_offset + instoff;
 
                 arange = (Dwarf_Arange)
                     _dwarf_get_alloc(dbg, DW_DLA_ARANGE, 1);
@@ -236,7 +226,7 @@ _dwarf_frame_address_offsets(Dwarf_Debug dbg, Dwarf_Addr ** addrlist,
                     return (DW_DLV_ERROR);
                 }
                 arange->ar_address = add;
-                arange->ar_info_offset = off;
+                arange->ar_info_offset = off2;
                 arange_count++;
                 curr_chain = (Dwarf_Chain)
                     _dwarf_get_alloc(dbg, DW_DLA_CHAIN, 1);
@@ -273,11 +263,11 @@ _dwarf_frame_address_offsets(Dwarf_Debug dbg, Dwarf_Addr ** addrlist,
     }
 
     curr_chain = head_chain;
-    for (i = 0; i < arange_count; i++) {
+    for (u = 0; u < arange_count; u++) {
         Dwarf_Arange ar = curr_chain->ch_item;
 
-        arange_addrs[i] = ar->ar_address;
-        arange_offsets[i] = ar->ar_info_offset;
+        arange_addrs[u] = ar->ar_address;
+        arange_offsets[u] = ar->ar_info_offset;
         prev_chain = curr_chain;
         curr_chain = curr_chain->ch_next;
         dwarf_dealloc(dbg, ar, DW_DLA_ARANGE);

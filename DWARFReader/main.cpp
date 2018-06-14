@@ -56,7 +56,9 @@ static Dwarf_Small pe_get_length_pointer_size(void *obj)
 
 static Dwarf_Unsigned pe_get_section_count(void *obj)
 {
-
+	PeObject *pe_obj = (PeObject*)obj;
+	PIMAGE_FILE_HEADER pFileHeader = &pe_obj->pNtHeaders->FileHeader;
+	return pFileHeader->NumberOfSections + 1;
 }
 
 static int pe_load_section(void *obj,
