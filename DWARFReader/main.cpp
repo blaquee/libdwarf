@@ -31,7 +31,32 @@ Dwarf_Half section_index,
 Dwarf_Obj_Access_Section *return_section,
 int *error)
 {
+	PeObject* pe_obj = (PeObject*)obj;
+	return_section->addr = 0;
+	if(section_index == 0)
+	{
+		return_section->size = 0;
+		return_section->name = 0;
+		return_section->link = 0;
+	}
+	else
+	{
+		PIMAGE_SECTION_HEADER pSection = pe_obj->Sections + section_index - 1;
+		if(pSection->Misc.VirtualSize < pSection->SizeOfRawData){
+			return_section->size = pSection->Misc.VirtualSize;
+		}
+		else
+			return_section->size = pSection->SizeOfRawData;
 
+		return_section->name = (const char*)pSection->Name;
+		// Get the real name from the string table
+		if(return_section->name[0] == '/'){
+			return_section->name = &pe_obj->pStringTable[atoi((const char*)&return_section[1])];
+		}
+	}
+	return_section->link = 0;
+	
+	return DW_DLV_OK;
 }
 
 static Dwarf_Endianness pe_get_byte_order(void *obj)
@@ -56,7 +81,9 @@ static Dwarf_Small pe_get_length_pointer_size(void *obj)
 
 static Dwarf_Unsigned pe_get_section_count(void *obj)
 {
-
+	PeObject* pe_obj = (PeObject*)obj;
+	PIMAGE_FILE_HEADER pFileHeader = &pe_obj->pNtHeaders->FileHeader;
+	return pFileHeader->NumberOfSections + 1;
 }
 
 static int pe_load_section(void *obj,
