@@ -13,7 +13,7 @@ int dwarf_pe_init(HANDLE hFile, TCHAR* chFilePath,
 	Dwarf_Handler errHandler, Dwarf_Ptr errArg,
 	Dwarf_Debug *retDbg, Dwarf_Error *dwErr);
 
-int dwarf_pe_finish(Dwarf_Debug dbg, Dwarf_Error err);
+int dwarf_pe_finish(Dwarf_Debug dbg, Dwarf_Error *err);
 
 #ifdef __cplusplus
 }
